@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form id="upload-form" method="post" enctype="multipart/form-data" action="/">
+        <input 
+            type="file" 
+            id="file"
+            name="file"
+            accept=".stl,.obj,.zip"
+        >
+        <button>제출</button>
+    </form>
+</body>
+
+<script>
+  document.addEventListener("DOMContentLoaded",()=>{
+    const uploadForm = document.getElementById("upload-form");
+    const file = document.getElementById("file-input");
+    let applyFile = file.files;
+
+    file.addEventListener('change', () => {
+      applyFile = file.files;
+    })
+
+    uploadForm.addEventListener("submit", (e) =>{
+      e.preventDefault();
+      const formData = new FormData();
+      formData.append('data', applyFile);
+
+        fetch('http://localhost:3000/', {
+            method: 'POST',
+            body: formData
+        })
+          .then(response => {
+              if (!response.ok) {
+                throw new Error('파일 업로드에 실패했습니다.');
+              }
+            return response.json();
+          })
+    })
+
+  })
+</script>
+</html>
